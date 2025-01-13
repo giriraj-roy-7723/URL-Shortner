@@ -1,7 +1,19 @@
-const express=require("express");
-const {handleGenerateNewShortURL,handleGetAnalytics}=require("../controllers/url");
-const router=express.Router();
+const mongoose=require('mongoose')
 
-router.post('/',handleGenerateNewShortURL); 
-router.get('/analytics/:shortId',handleGetAnalytics)
-module.exports=router;
+const urlSchema=new mongoose.Schema({
+  shortId:{
+    type:String,
+    unique:true,
+  }, 
+  redirectURL:{
+    type:String,
+    required:true,
+  },
+  visitHistory:[{timestamp:{type:Number}}],
+
+},{timestamp:true}
+)
+
+const URL=mongoose.model("url",urlSchema);
+
+module.exports=URL;
